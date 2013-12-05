@@ -184,8 +184,11 @@ public abstract class CompareFilterImpl extends BinaryComparisonAbstract
      */
     protected int compare (Comparable leftObj, Comparable rightObj) {
     	//implements a lax compare, doing some back flips for numbers
-    	if (!(leftObj instanceof Number && rightObj instanceof Number)) 
-    	{	
+        if (!(leftObj instanceof Number && rightObj instanceof Number))
+    	{
+
+
+
     		//check for case of one number one string
     		if (!(leftObj.getClass() == rightObj.getClass()))  
     	    {
@@ -219,7 +222,18 @@ public abstract class CompareFilterImpl extends BinaryComparisonAbstract
     	    		leftObj = leftObj.toString();
     	    		rightObj = rightObj.toString();
     	    	}
-    	    }
+    	    } else {
+                //Check for case of strings that can both be converted to Numbers
+                try {
+                    leftObj = new Double( Double.parseDouble( (String) leftObj ) );
+                    rightObj = new Double( Double.parseDouble( (String) rightObj ));
+                }
+                catch(Exception e)
+                {
+                    leftObj = leftObj.toString();
+                    rightObj = rightObj.toString();
+                }
+            }
     		return leftObj.compareTo(rightObj);
     	} else {
     		//both numbers, make double
